@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "JINS2ndAPP",
+    "name": "SENECA",
     "slug": "JINS2ndAPP",
-    "version": "1.0.0",
+    "version": "1.1.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -16,24 +16,53 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "buildNumber": "1.1.2",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app needs access to your camera to take pictures.",
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to upload pictures.",
+        "NSPhotoLibraryAddUsageDescription": "This app needs access to your photo library to save pictures."
+      },
+      "bundleIdentifier": "com.jinkihyeok.SENECA"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_MEDIA_LOCATION",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
+        "expo-media-library",
+        {
+          "photosPermission": "This app needs access to your photo library to upload pictures.",
+          "savePhotosPermission": "This app needs access to your photo library to save pictures.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      [
         "expo-image-picker",
         {
-          "cameraPermission": "카메라 접근 권한이 필요합니다."
+          "photosPermission": "This app needs access to your photo library to upload pictures."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "0b06739c-d202-4d0b-a288-ac3c9d427ee6"
+      }
+    }
   }
 }
