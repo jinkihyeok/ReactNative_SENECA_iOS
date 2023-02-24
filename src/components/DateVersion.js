@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 
-function DateVersion({ version, sliderValue, pickedDateTime }) {
+function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
   const newdate = new Date();
 
   function getYear() {
@@ -231,7 +231,7 @@ function DateVersion({ version, sliderValue, pickedDateTime }) {
         <View style={{ paddingVertical: 5 }}>
           <Text
             style={{
-              color: "white",
+              color: fontColor,
               fontSize: sliderValue,
               fontWeight: "bold",
             }}
@@ -240,12 +240,12 @@ function DateVersion({ version, sliderValue, pickedDateTime }) {
           </Text>
         </View>
         <View style={{ paddingVertical: 0 }}>
-          <Text style={{ color: "white", fontSize: sliderValue * 0.6 }}>
+          <Text style={{ color: fontColor, fontSize: sliderValue * 0.6 }}>
             {getYear()}-{getMonth()}-{getDate()}
           </Text>
         </View>
         <View>
-          <Text style={{ color: "white", fontSize: sliderValue * 0.6 }}>
+          <Text style={{ color: fontColor, fontSize: sliderValue * 0.6 }}>
             {getTimes()}
           </Text>
         </View>
@@ -265,7 +265,7 @@ function DateVersion({ version, sliderValue, pickedDateTime }) {
         <View style={{ paddingVertical: 5 }}>
           <Text
             style={{
-              color: "white",
+              color: fontColor,
               fontSize: sliderValue,
               fontWeight: "bold",
             }}
@@ -274,7 +274,7 @@ function DateVersion({ version, sliderValue, pickedDateTime }) {
           </Text>
         </View>
         <View>
-          <Text style={{ color: "white", fontSize: sliderValue * 0.7 }}>
+          <Text style={{ color: fontColor, fontSize: sliderValue * 0.7 }}>
             {getTimes()}
           </Text>
         </View>
@@ -294,7 +294,7 @@ function DateVersion({ version, sliderValue, pickedDateTime }) {
         <View style={{ paddingVertical: 5 }}>
           <Text
             style={{
-              color: "white",
+              color: fontColor,
               fontSize: sliderValue,
               fontWeight: "bold",
             }}

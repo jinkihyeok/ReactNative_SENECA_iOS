@@ -1,4 +1,4 @@
-import { AutoFocus, Camera, CameraType } from "expo-camera";
+import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useRef, useState } from "react";
@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   ImageBackground,
   Alert,
-  Button,
   Pressable,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -28,6 +27,7 @@ function CameraScreen() {
   const cameraRef = useRef(null);
   const [textLocation, setTextLocation] = useState("2");
   const [sliderValue, setSliderValue] = useState(30);
+  const [fontColor, setFontColor] = useState("white");
   const [version, setVersion] = useState("ver1");
   const [pickedDateTime, setPickedDateTime] = useState(null);
   const snapShotRef = useRef();
@@ -173,30 +173,66 @@ function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text
+      <View style={{ flexDirection: "row", paddingHorizontal: 10 }}>
+        <View
+          style={{
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "25%",
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+                paddingBottom: 10,
+              }}
+            >
+              Color
+            </Text>
+          </View>
+          <View
             style={{
-              color: "white",
-              fontSize: 18,
-              fontWeight: "bold",
-              padding: 5,
-              borderRadius: "50%",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              width: "100%",
+              backgroundColor: "#343434",
+              borderRadius: 10,
             }}
           >
-            글씨 크기
-          </Text>
+            <TouchableOpacity onPress={() => setFontColor("white")}>
+              <Text style={{ color: "white", fontSize: 35 }}>●</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setFontColor("black")}>
+              <Text style={{ color: "black", fontSize: 35 }}>●</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.sliderContainer}>
-          <Slider
-            style={styles.slider}
-            minimumValue={20}
-            maximumValue={40}
-            minimumTrackTintColor="#FFFFFF"
-            value={sliderValue}
-            onValueChange={(value) => setSliderValue(value)}
-            step={1}
-          />
+        <View style={styles.topContainer}>
+          <View style={{ alignItems: "center" }}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+                paddingBottom: 10,
+              }}
+            >
+              Size
+            </Text>
+          </View>
+          <View style={styles.sliderContainer}>
+            <Slider
+              style={styles.slider}
+              minimumValue={20}
+              maximumValue={40}
+              minimumTrackTintColor="#FFFFFF"
+              value={sliderValue}
+              onValueChange={(value) => setSliderValue(value)}
+              step={1}
+            />
+          </View>
         </View>
       </View>
       {!image ? (
@@ -211,6 +247,7 @@ function CameraScreen() {
                   version={version}
                   sliderValue={sliderValue}
                   pickedDateTime={pickedDateTime}
+                  fontColor={fontColor}
                 />
                 <View style={styles.locationBtnContainer2}>
                   <View style={styles.topLocationBtn}>
@@ -288,6 +325,7 @@ function CameraScreen() {
               version={version}
               sliderValue={sliderValue}
               pickedDateTime={pickedDateTime}
+              fontColor={fontColor}
             />
             <View style={styles.locationBtnContainer2}>
               <View style={styles.topLocationBtn}>
@@ -433,6 +471,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     paddingVertical: 20,
+    width: "75%",
   },
   sliderContainer: {
     justifyContent: "center",
@@ -440,8 +479,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   slider: {
-    width: "80%",
-    height: 40,
+    width: "90%",
   },
   locationBtnContainer2: {
     width: "100%",
@@ -513,5 +551,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
     paddingVertical: 30,
+  },
+  topText: {
+    color: "grey",
+    fontSize: 18,
   },
 });
