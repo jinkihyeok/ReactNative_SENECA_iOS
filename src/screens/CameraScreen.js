@@ -26,7 +26,7 @@ function CameraScreen() {
   const [cameraType, setCameraType] = useState(CameraType.back);
   const cameraRef = useRef(null);
   const [textLocation, setTextLocation] = useState("2");
-  const [sliderValue, setSliderValue] = useState(30);
+  const [sliderValue, setSliderValue] = useState(25);
   const [fontColor, setFontColor] = useState("white");
   const [version, setVersion] = useState("ver1");
   const [pickedDateTime, setPickedDateTime] = useState(null);
@@ -225,8 +225,8 @@ function CameraScreen() {
           <View style={styles.sliderContainer}>
             <Slider
               style={styles.slider}
-              minimumValue={20}
-              maximumValue={40}
+              minimumValue={14}
+              maximumValue={36}
               minimumTrackTintColor="#FFFFFF"
               value={sliderValue}
               onValueChange={(value) => setSliderValue(value)}
@@ -423,6 +423,26 @@ function CameraScreen() {
             #3
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btnStyle}
+          onPress={() => setVersion("ver4")}
+        >
+          <Text
+            style={[styles.topText, version === "ver4" && { color: "red" }]}
+          >
+            #4
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btnStyle}
+          onPress={() => setVersion("ver5")}
+        >
+          <Text
+            style={[styles.topText, version === "ver5" && { color: "red" }]}
+          >
+            #5
+          </Text>
+        </TouchableOpacity>
       </View>
       {!image ? (
         <View style={styles.buttonContainer}>
@@ -513,9 +533,9 @@ const styles = StyleSheet.create({
   },
   versionContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     alignItems: "center",
-    paddingHorizontal: 50,
+    paddingHorizontal: 20,
     paddingTop: 20,
   },
   camera: {
@@ -544,7 +564,6 @@ const styles = StyleSheet.create({
   btnStyle: {
     width: "30%",
     justifyContent: "center",
-
     alignItems: "center",
   },
   text: {

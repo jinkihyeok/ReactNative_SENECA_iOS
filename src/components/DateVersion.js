@@ -27,6 +27,20 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
     }
   }
 
+  function getMonthSliceZero() {
+    if (pickedDateTime === null) {
+      const month = newdate.getMonth() + 1;
+      return month;
+    } else {
+      const pickedMonth = pickedDateTime.slice(5, 7);
+      if (pickedMonth[0] === "0") {
+        return pickedMonth[1];
+      } else {
+        return pickedMonth;
+      }
+    }
+  }
+
   function getMonthEng() {
     if (pickedDateTime === null) {
       const month = newdate.getMonth() + 1;
@@ -96,6 +110,20 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
     } else {
       const pickedDate = pickedDateTime.slice(8, 10);
       return pickedDate;
+    }
+  }
+
+  function getDateSliceZero() {
+    if (pickedDateTime === null) {
+      const date = newdate.getDate();
+      return date;
+    } else {
+      const pickedDate = pickedDateTime.slice(8, 10);
+      if (pickedDate[0] === "0") {
+        return pickedDate[1];
+      } else {
+        return pickedDate;
+      }
     }
   }
 
@@ -219,6 +247,35 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
     }
   }
 
+  function getDayKo() {
+    if (pickedDateTime === null) {
+      const day = newdate.getDay();
+      if (day === 0) {
+        return "(일)";
+      } else if (day === 1) {
+        return "(월)";
+      } else if (day === 2) {
+        return "(화)";
+      } else if (day === 3) {
+        return "(수)";
+      } else if (day === 4) {
+        return "(목)";
+      } else if (day === 5) {
+        return "(금)";
+      } else if (day === 6) {
+        return "(토)";
+      }
+    } else {
+      const pickedYear = pickedDateTime.slice(0, 4);
+      const pickedMonth = pickedDateTime.slice(5, 7);
+      const pickedDate = pickedDateTime.slice(8, 10);
+      const pickedFullDate = `${pickedYear}-${pickedMonth}-${pickedDate}`;
+      const week = ["(일)", "(월)", "(화)", "(수)", "(목)", "(금)", "(토)"];
+      const dayOfWeek = week[new Date(pickedFullDate).getDay()];
+      return dayOfWeek;
+    }
+  }
+
   if (version === "ver1") {
     return (
       <View
@@ -270,12 +327,12 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
               fontWeight: "bold",
             }}
           >
-            {getYear()}年 {getMonth()}月 {getDate()}日
+            {getTimes()}
           </Text>
         </View>
         <View>
           <Text style={{ color: fontColor, fontSize: sliderValue * 0.7 }}>
-            {getTimes()}
+            {getYear()}-{getMonth()}-{getDate()}&nbsp;{getDayShort()}
           </Text>
         </View>
       </View>
@@ -299,7 +356,61 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
               fontWeight: "bold",
             }}
           >
+            {getYear()}年 {getMonthSliceZero()}月 {getDateSliceZero()}日
+          </Text>
+        </View>
+        <View>
+          <Text style={{ color: fontColor, fontSize: sliderValue * 0.7 }}>
+            {getTimes()}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (version === "ver4") {
+    return (
+      <View
+        style={{
+          alignItems: "center",
+          paddingVertical: 10,
+          paddingHorizontal: 10,
+        }}
+      >
+        <View style={{ paddingVertical: 5 }}>
+          <Text
+            style={{
+              color: fontColor,
+              fontSize: sliderValue,
+              fontWeight: "bold",
+            }}
+          >
             {getDayShort()} {getMonthEng()} {getDate()}&nbsp;&nbsp;{getTimes()}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
+  if (version === "ver5") {
+    return (
+      <View
+        style={{
+          alignItems: "center",
+          paddingVertical: 10,
+          paddingHorizontal: 10,
+        }}
+      >
+        <View style={{ paddingVertical: 5 }}>
+          <Text
+            style={{
+              color: fontColor,
+              fontSize: sliderValue,
+              fontWeight: "bold",
+            }}
+          >
+            {getYear()}년 {getMonthSliceZero()}월 {getDateSliceZero()}일&nbsp;
+            {getDayKo()}
           </Text>
         </View>
       </View>
