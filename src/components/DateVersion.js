@@ -1,5 +1,8 @@
 import { View, Text } from "react-native";
 
+Text.defaultProps = Text.defaultProps || {};
+Text.defaultProps.allowFontScaling = false;
+
 function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
   const newdate = new Date();
 

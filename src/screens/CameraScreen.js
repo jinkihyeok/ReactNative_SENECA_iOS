@@ -14,9 +14,13 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import DateVersion from "../components/DateVersion";
 import { captureRef } from "react-native-view-shot";
+
+Text.defaultProps = Text.defaultProps || {};
+Text.defaultProps.allowFontScaling = false;
 
 function CameraScreen() {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -26,7 +30,7 @@ function CameraScreen() {
   const [cameraType, setCameraType] = useState(CameraType.back);
   const cameraRef = useRef(null);
   const [textLocation, setTextLocation] = useState("2");
-  const [sliderValue, setSliderValue] = useState(25);
+  const [sliderValue, setSliderValue] = useState(23);
   const [fontColor, setFontColor] = useState("white");
   const [version, setVersion] = useState("ver1");
   const [pickedDateTime, setPickedDateTime] = useState(null);
@@ -198,15 +202,16 @@ function CameraScreen() {
               flexDirection: "row",
               justifyContent: "space-around",
               width: "100%",
+              padding: 5,
               backgroundColor: "#343434",
               borderRadius: 10,
             }}
           >
             <TouchableOpacity onPress={() => setFontColor("white")}>
-              <Text style={{ color: "white", fontSize: 35 }}>●</Text>
+              <FontAwesome name="circle" size={24} color="white" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setFontColor("black")}>
-              <Text style={{ color: "black", fontSize: 35 }}>●</Text>
+              <FontAwesome name="circle" size={24} color="black" />
             </TouchableOpacity>
           </View>
         </View>
@@ -225,8 +230,8 @@ function CameraScreen() {
           <View style={styles.sliderContainer}>
             <Slider
               style={styles.slider}
-              minimumValue={14}
-              maximumValue={36}
+              minimumValue={12}
+              maximumValue={34}
               minimumTrackTintColor="#FFFFFF"
               value={sliderValue}
               onValueChange={(value) => setSliderValue(value)}
