@@ -1,6 +1,3 @@
-import { Camera, CameraType } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
-import * as ImagePicker from "expo-image-picker";
 import { useEffect, useRef, useState } from "react";
 import {
   View,
@@ -11,13 +8,16 @@ import {
   Alert,
   Pressable,
 } from "react-native";
+import { Camera, CameraType } from "expo-camera";
+import { captureRef } from "react-native-view-shot";
+import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import DateVersion from "../components/DateVersion";
-import { captureRef } from "react-native-view-shot";
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
@@ -53,7 +53,7 @@ function CameraScreen() {
   }, []);
 
   const takePicture = async () => {
-    if (cameraRef) {
+    if (cameraRef.current) {
       try {
         const options = { quality: 1 };
         const data = await cameraRef.current.takePictureAsync(options);
@@ -72,14 +72,11 @@ function CameraScreen() {
       if (album === null) {
         await MediaLibrary.createAlbumAsync("Seneca", asset, false);
       } else {
-        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false).then(
-          () => {
-            Alert.alert("사진이 저장되었습니다.");
-          }
-        );
+        await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
       }
       setImage(null);
       setPickedDateTime(null);
+      Alert.alert("사진이 저장되었습니다.");
     } catch (e) {
       console.log(e);
     }
@@ -140,15 +137,8 @@ function CameraScreen() {
 
   if (hasCameraPermission === false) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text
-          style={{
-            fontSize: 20,
-            color: "white",
-            fontWeight: "bold",
-            textAlign: "center",
-          }}
-        >
+      <View style={styles.permissionContainer}>
+        <Text style={styles.permissionText}>
           카메라 접근 권한이 없습니다. {"\n"} 설정에서 카메라 접근 권한을 허용한
           후 {"\n"} 다시 시도해주세요.
         </Text>
@@ -158,15 +148,8 @@ function CameraScreen() {
 
   if (hasMediaLibraryPermission === false) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text
-          style={{
-            fontSize: 20,
-            color: "white",
-            fontWeight: "bold",
-            textAlign: "center",
-          }}
-        >
+      <View style={styles.permissionContainer}>
+        <Text style={styles.permissionText}>
           사진 저장 권한이 없습니다. {"\n"} 설정에서 사진 저장 권한을 허용한 후
           {"\n"}
           다시 시도해주세요.
@@ -177,67 +160,35 @@ function CameraScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row", paddingHorizontal: 10 }}>
-        <View
-          style={{
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "25%",
-          }}
-        >
-          <View>
-            <Text
-              style={{
-                color: "white",
-                fontSize: 18,
-                paddingBottom: 10,
-              }}
+      <View style={styles.topContainer}>
+        <View style={styles.colorContainer}>
+          <Text style={styles.labelText}>Color</Text>
+          <View style={styles.colorButtonContainer}>
+            <TouchableOpacity
+              onPress={() => setFontColor("white")}
+              style={styles.colorButton}
             >
-              Color
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              width: "100%",
-              padding: 5,
-              backgroundColor: "#343434",
-              borderRadius: 10,
-            }}
-          >
-            <TouchableOpacity onPress={() => setFontColor("white")}>
               <FontAwesome name="circle" size={24} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setFontColor("black")}>
+            <TouchableOpacity
+              onPress={() => setFontColor("black")}
+              style={styles.colorButton}
+            >
               <FontAwesome name="circle" size={24} color="black" />
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.topContainer}>
-          <View style={{ alignItems: "center" }}>
-            <Text
-              style={{
-                color: "white",
-                fontSize: 18,
-                paddingBottom: 10,
-              }}
-            >
-              Size
-            </Text>
-          </View>
-          <View style={styles.sliderContainer}>
-            <Slider
-              style={styles.slider}
-              minimumValue={12}
-              maximumValue={34}
-              minimumTrackTintColor="#FFFFFF"
-              value={sliderValue}
-              onValueChange={(value) => setSliderValue(value)}
-              step={1}
-            />
-          </View>
+        <View style={styles.sliderContainer}>
+          <Text style={styles.labelText}>Size</Text>
+          <Slider
+            style={styles.slider}
+            minimumValue={12}
+            maximumValue={34}
+            minimumTrackTintColor="#FFFFFF"
+            value={sliderValue}
+            onValueChange={(value) => setSliderValue(value)}
+            step={1}
+          />
         </View>
       </View>
       {!image ? (
@@ -494,17 +445,54 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "black",
   },
-  topContainer: {
-    paddingVertical: 20,
-    width: "75%",
-  },
-  sliderContainer: {
+  permissionContainer: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+  },
+  permissionText: {
+    fontSize: 20,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  topContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 10,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  colorContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  labelText: {
+    color: "white",
+    fontSize: 18,
+    paddingBottom: 10,
+    textAlign: "center",
+  },
+  colorButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 5,
+    backgroundColor: "#343434",
+    borderRadius: 10,
+  },
+  colorButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  sliderContainer: {
+    flex: 1,
+    paddingVertical: 20,
   },
   slider: {
     width: "90%",
+    alignSelf: "center",
   },
   locationBtnContainer2: {
     width: "100%",
