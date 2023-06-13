@@ -223,140 +223,60 @@ function CameraScreen() {
           </ImageBackground>
         </Camera>
       ) : (
-        <View style={{ flex: 1 }} ref={snapShotRef}>
+        <View style={styles.imageContainer} ref={snapShotRef}>
           <ImageBackground
             source={{ uri: image }}
             style={[styles.camera, textLocationStyle()]}
           >
-            <DateVersion
-              version={version}
-              sliderValue={sliderValue}
-              pickedDateTime={pickedDateTime}
-              fontColor={fontColor}
-            />
-            <View style={styles.locationBtnContainer2}>
-              <View style={styles.topLocationBtn}>
+            <View style={styles.dateContainer}>
+              <DateVersion
+                version={version}
+                sliderValue={sliderValue}
+                pickedDateTime={pickedDateTime}
+                fontColor={fontColor}
+              />
+            </View>
+            <View style={styles.locationButtonContainer}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((location) => (
                 <Pressable
-                  style={styles.locationBtn}
-                  onPress={() => setTextLocation("1")}
+                  key={location}
+                  style={styles.locationButton}
+                  onPress={() => setTextLocation(location.toString())}
                 >
-                  <Text>Touch</Text>
+                  <Text style={styles.locationButtonText}>Touch</Text>
                 </Pressable>
-                <Pressable
-                  style={styles.locationBtn}
-                  onPress={() => setTextLocation("2")}
-                >
-                  <Text>Touch</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.locationBtn}
-                  onPress={() => setTextLocation("3")}
-                >
-                  <Text>Touch</Text>
-                </Pressable>
-              </View>
-              <View style={styles.midLocationBtn}>
-                <Pressable
-                  style={styles.locationBtn}
-                  onPress={() => setTextLocation("4")}
-                >
-                  <Text>Touch</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.locationBtn}
-                  onPress={() => setTextLocation("5")}
-                >
-                  <Text>Touch</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.locationBtn}
-                  onPress={() => setTextLocation("6")}
-                >
-                  <Text>Touch</Text>
-                </Pressable>
-              </View>
-              <View style={styles.botLocationBtn}>
-                <Pressable
-                  style={styles.locationBtn}
-                  onPress={() => setTextLocation("7")}
-                >
-                  <Text>Touch</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.locationBtn}
-                  onPress={() => setTextLocation("8")}
-                >
-                  <Text>Touch</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.locationBtn}
-                  onPress={() => setTextLocation("9")}
-                >
-                  <Text>Touch</Text>
-                </Pressable>
-              </View>
+              ))}
             </View>
           </ImageBackground>
         </View>
       )}
       <View style={styles.versionContainer}>
-        <TouchableOpacity
-          style={styles.btnStyle}
-          onPress={() => setVersion("ver1")}
-        >
-          <Text
-            style={[styles.topText, version === "ver1" && { color: "red" }]}
+        {[1, 2, 3, 4, 5].map((ver) => (
+          <TouchableOpacity
+            key={ver}
+            style={styles.versionButton}
+            onPress={() => setVersion(`ver${ver}`)}
           >
-            #1
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnStyle}
-          onPress={() => setVersion("ver2")}
-        >
-          <Text
-            style={[styles.topText, version === "ver2" && { color: "red" }]}
-          >
-            #2
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnStyle}
-          onPress={() => setVersion("ver3")}
-        >
-          <Text
-            style={[styles.topText, version === "ver3" && { color: "red" }]}
-          >
-            #3
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnStyle}
-          onPress={() => setVersion("ver4")}
-        >
-          <Text
-            style={[styles.topText, version === "ver4" && { color: "red" }]}
-          >
-            #4
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btnStyle}
-          onPress={() => setVersion("ver5")}
-        >
-          <Text
-            style={[styles.topText, version === "ver5" && { color: "red" }]}
-          >
-            #5
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={[
+                styles.versionButtonText,
+                version === `ver${ver}` && { color: "red" },
+              ]}
+            >
+              #{ver}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
       {!image ? (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={pickImage} style={styles.takePictureBtn}>
+          <TouchableOpacity
+            onPress={pickImage}
+            style={styles.imagePickerButton}
+          >
             <Ionicons name="ios-albums-outline" size={30} color="grey" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={takePicture} style={styles.takePictureBtn}>
+          <TouchableOpacity onPress={takePicture} style={styles.cameraButton}>
             <MaterialIcons name="camera" size={60} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
@@ -372,14 +292,14 @@ function CameraScreen() {
           </TouchableOpacity>
         </View>
       ) : (
-        <View style={styles.buttonContainer2}>
-          <TouchableOpacity onPress={reTake} style={styles.reTakeBtn}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={reTake} style={styles.imagePickerButton}>
             <Ionicons name="return-down-back-outline" size={35} color="white" />
           </TouchableOpacity>
-          <View style={styles.takePictureBtn}>
+          <View style={styles.cameraButton}>
             <MaterialIcons name="camera" size={60} color="black" />
           </View>
-          <TouchableOpacity onPress={saveImage} style={styles.saveBtn}>
+          <TouchableOpacity onPress={saveImage} style={styles.saveButton}>
             <MaterialIcons name="save-alt" size={35} color="white" />
           </TouchableOpacity>
         </View>
@@ -478,12 +398,23 @@ const styles = StyleSheet.create({
     color: "white",
     opacity: 0,
   },
+  imageContainer: {
+    flex: 1,
+  },
   versionContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     paddingHorizontal: 20,
     paddingTop: 20,
+  },
+  versionButton: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  versionButtonText: {
+    color: "grey",
+    fontSize: 18,
   },
   bgImage: {
     flex: 1,
@@ -498,25 +429,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     paddingVertical: 20,
   },
-  buttonContainer2: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 40,
-    paddingVertical: 20,
+  imagePickerButton: {
+    marginRight: 20,
   },
-  btnStyle: {
-    width: "30%",
-    justifyContent: "center",
-    alignItems: "center",
+  cameraButton: {
+    marginHorizontal: 20,
   },
-  text: {
-    fontWeight: "bold",
-    color: "white",
-    paddingVertical: 30,
-  },
-  topText: {
-    color: "grey",
-    fontSize: 18,
+  saveButton: {
+    marginLeft: 20,
   },
 });
