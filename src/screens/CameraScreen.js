@@ -18,6 +18,7 @@ import { EvilIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import DateVersion from "../components/DateVersion";
+import PatternView from "../components/patternView";
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
@@ -192,85 +193,35 @@ function CameraScreen() {
         </View>
       </View>
       {!image ? (
-        <View style={{ flex: 1 }}>
-          <Camera style={styles.camera} type={cameraType} ref={cameraRef}>
-            <View style={{ flex: 1 }}>
-              <ImageBackground
-                style={[styles.bgImage, textLocationStyle()]}
-                resizeMode="cover"
-              >
-                <DateVersion
-                  version={version}
-                  sliderValue={sliderValue}
-                  pickedDateTime={pickedDateTime}
-                  fontColor={fontColor}
-                />
-                <View style={styles.locationBtnContainer2}>
-                  <View style={styles.topLocationBtn}>
-                    <Pressable
-                      style={styles.locationBtn}
-                      onPress={() => setTextLocation("1")}
-                    >
-                      <Text>Touch</Text>
-                    </Pressable>
-                    <Pressable
-                      style={styles.locationBtn}
-                      onPress={() => setTextLocation("2")}
-                    >
-                      <Text>Touch</Text>
-                    </Pressable>
-                    <Pressable
-                      style={styles.locationBtn}
-                      onPress={() => setTextLocation("3")}
-                    >
-                      <Text>Touch</Text>
-                    </Pressable>
-                  </View>
-                  <View style={styles.midLocationBtn}>
-                    <Pressable
-                      style={styles.locationBtn}
-                      onPress={() => setTextLocation("4")}
-                    >
-                      <Text>Touch</Text>
-                    </Pressable>
-                    <Pressable
-                      style={styles.locationBtn}
-                      onPress={() => setTextLocation("5")}
-                    >
-                      <Text>Touch</Text>
-                    </Pressable>
-                    <Pressable
-                      style={styles.locationBtn}
-                      onPress={() => setTextLocation("6")}
-                    >
-                      <Text>Touch</Text>
-                    </Pressable>
-                  </View>
-                  <View style={styles.botLocationBtn}>
-                    <Pressable
-                      style={styles.locationBtn}
-                      onPress={() => setTextLocation("7")}
-                    >
-                      <Text>Touch</Text>
-                    </Pressable>
-                    <Pressable
-                      style={styles.locationBtn}
-                      onPress={() => setTextLocation("8")}
-                    >
-                      <Text>Touch</Text>
-                    </Pressable>
-                    <Pressable
-                      style={styles.locationBtn}
-                      onPress={() => setTextLocation("9")}
-                    >
-                      <Text>Touch</Text>
-                    </Pressable>
-                  </View>
-                </View>
-              </ImageBackground>
+        <Camera style={styles.camera} type={cameraType} ref={cameraRef}>
+          <ImageBackground
+            style={[styles.bgImage, textLocationStyle()]}
+            resizeMode="cover"
+          >
+            <View style={styles.PatternViewContainer}>
+              <PatternView />
             </View>
-          </Camera>
-        </View>
+            <View style={styles.dateContainer}>
+              <DateVersion
+                version={version}
+                sliderValue={sliderValue}
+                pickedDateTime={pickedDateTime}
+                fontColor={fontColor}
+              />
+            </View>
+            <View style={styles.locationButtonContainer}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((location) => (
+                <Pressable
+                  key={location}
+                  style={styles.locationButton}
+                  onPress={() => setTextLocation(location.toString())}
+                >
+                  <Text style={styles.locationButtonText}>Touch</Text>
+                </Pressable>
+              ))}
+            </View>
+          </ImageBackground>
+        </Camera>
       ) : (
         <View style={{ flex: 1 }} ref={snapShotRef}>
           <ImageBackground
@@ -494,34 +445,37 @@ const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
   },
-  locationBtnContainer2: {
+  camera: {
+    flex: 1,
+  },
+  PatternViewContainer: {
+    flex: 1,
+    position: "absolute",
     width: "100%",
     height: "100%",
-    flexDirection: "column",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dateContainer: {
+    flex: 1,
     position: "absolute",
   },
-  topLocationBtn: {
-    height: "30%",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-  },
-  midLocationBtn: {
-    height: "30%",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-  },
-  botLocationBtn: {
-    height: "30%",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-  },
-  locationBtn: {
-    width: "30%",
+  locationButtonContainer: {
+    width: "100%",
     height: "100%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  locationButton: {
+    width: 100 / 3 + "%",
+    height: 100 / 3 + "%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  locationButtonText: {
+    color: "white",
     opacity: 0,
   },
   versionContainer: {
@@ -530,9 +484,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingTop: 20,
-  },
-  camera: {
-    flex: 1,
   },
   bgImage: {
     flex: 1,
