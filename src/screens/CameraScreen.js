@@ -19,6 +19,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import DateVersion from "../components/DateVersion";
 import PatternView from "../components/patternView";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
@@ -30,12 +31,75 @@ function CameraScreen() {
   const [image, setImage] = useState(null);
   const [cameraType, setCameraType] = useState(CameraType.back);
   const cameraRef = useRef(null);
-  const [textLocation, setTextLocation] = useState("2");
+  const [textLocation, setTextLocation] = useState();
+  const [fontColor, setFontColor] = useState();
+  const [version, setVersion] = useState();
   const [sliderValue, setSliderValue] = useState(23);
-  const [fontColor, setFontColor] = useState("white");
-  const [version, setVersion] = useState("ver1");
   const [pickedDateTime, setPickedDateTime] = useState(null);
   const snapShotRef = useRef();
+
+  useEffect(() => {
+    const saveSettings = async () => {
+      try {
+        await AsyncStorage.setItem("textLocation", textLocation);
+        await AsyncStorage.setItem("fontColor", fontColor);
+        await AsyncStorage.setItem("version", version);
+        await AsyncStorage.setItem("sliderValue", sliderValue.toString());
+
+        console.log("saved", textLocation);
+        console.log("saved", fontColor);
+        console.log("saved", version);
+        console.log("saved", sliderValue);
+      } catch (error) {
+        console.log("Error saving settings:", error);
+      }
+    };
+
+    saveSettings();
+  }, [textLocation, fontColor, version, sliderValue]);
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const savedTextLocation = await AsyncStorage.getItem("textLocation");
+        if (savedTextLocation === null || savedTextLocation === undefined) {
+          setTextLocation("5");
+        } else {
+          setTextLocation(savedTextLocation);
+        }
+
+        const savedFontColor = await AsyncStorage.getItem("fontColor");
+        if (savedFontColor === null || savedFontColor === undefined) {
+          setFontColor("white");
+        } else {
+          setFontColor(savedFontColor);
+        }
+
+        const savedVersion = await AsyncStorage.getItem("version");
+        if (savedVersion === null || savedVersion === undefined) {
+          setVersion("ver1");
+        } else {
+          setVersion(savedVersion);
+        }
+
+        const savedSliderValue = await AsyncStorage.getItem("sliderValue");
+        if (savedSliderValue === null || savedSliderValue === undefined) {
+          setSliderValue(23);
+        } else {
+          setSliderValue(parseInt(savedSliderValue));
+        }
+
+        console.log("loaded", savedTextLocation);
+        console.log("loaded", savedFontColor);
+        console.log("loaded", savedVersion);
+        console.log("loaded", savedSliderValue);
+      } catch (error) {
+        console.log("Error loading settings:", error);
+      }
+    };
+
+    loadSettings();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -277,7 +341,7 @@ function CameraScreen() {
             <Ionicons name="ios-albums-outline" size={30} color="grey" />
           </TouchableOpacity>
           <TouchableOpacity onPress={takePicture} style={styles.cameraButton}>
-            <MaterialIcons name="camera" size={60} color="white" />
+            <Ionicons name="ios-radio-button-on" size={60} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
