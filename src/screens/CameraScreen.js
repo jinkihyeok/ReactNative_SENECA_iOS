@@ -16,10 +16,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import DateVersion from "../components/DateVersion";
 import PatternView from "../components/patternView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Sharing from "expo-sharing";
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
@@ -172,6 +174,21 @@ function CameraScreen() {
         );
         return;
       }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const shareImage = async () => {
+    try {
+      const result = await captureRef(snapShotRef);
+      console.log(`file:/${result}`);
+
+      await Sharing.shareAsync(`file://${result}`, {
+        mimeType: "image/jpeg",
+        dialogTitle: "공유하기",
+        UTI: "image/jpeg  ",
+      });
     } catch (e) {
       console.log(e);
     }
@@ -360,9 +377,9 @@ function CameraScreen() {
           <TouchableOpacity onPress={reTake} style={styles.imagePickerButton}>
             <Ionicons name="return-down-back-outline" size={35} color="white" />
           </TouchableOpacity>
-          <View style={styles.cameraButton}>
-            <MaterialIcons name="camera" size={60} color="black" />
-          </View>
+          <TouchableOpacity onPress={shareImage} style={styles.shareButton}>
+            <Entypo name="share" size={35} color="white" />
+          </TouchableOpacity>
           <TouchableOpacity onPress={saveImage} style={styles.saveButton}>
             <MaterialIcons name="save-alt" size={35} color="white" />
           </TouchableOpacity>
@@ -498,6 +515,9 @@ const styles = StyleSheet.create({
   },
   cameraButton: {
     marginHorizontal: 20,
+  },
+  shareButton: {
+    marginVertical: 14,
   },
   saveButton: {
     marginLeft: 20,
