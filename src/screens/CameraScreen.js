@@ -22,6 +22,8 @@ import DateVersion from "../components/DateVersion";
 import PatternView from "../components/patternView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Sharing from "expo-sharing";
+import ColorSelector from "../components/ColorSelector";
+import SizeSlider from "../components/SizeSlider";
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
@@ -243,35 +245,8 @@ function CameraScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <View style={styles.colorContainer}>
-          <Text style={styles.labelText}>Color</Text>
-          <View style={styles.colorButtonContainer}>
-            <TouchableOpacity
-              onPress={() => setFontColor("white")}
-              style={styles.colorButton}
-            >
-              <FontAwesome name="circle" size={24} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setFontColor("black")}
-              style={styles.colorButton}
-            >
-              <FontAwesome name="circle" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.sliderContainer}>
-          <Text style={styles.labelText}>Size</Text>
-          <Slider
-            style={styles.slider}
-            minimumValue={12}
-            maximumValue={34}
-            minimumTrackTintColor="#FFFFFF"
-            value={sliderValue}
-            onValueChange={(value) => setSliderValue(value)}
-            step={1}
-          />
-        </View>
+        <ColorSelector setFontColor={setFontColor} />
+        <SizeSlider sliderValue={sliderValue} setSliderValue={setSliderValue} />
       </View>
       {!image ? (
         <Camera style={styles.camera} type={cameraType} ref={cameraRef}>
@@ -410,11 +385,13 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flexDirection: "row",
-    paddingHorizontal: 10,
+    marginHorizontal: 20,
+    marginVertical: 20,
     alignItems: "center",
     justifyContent: "space-between",
   },
   colorContainer: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -438,14 +415,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  sliderContainer: {
-    flex: 1,
-    paddingVertical: 20,
-  },
-  slider: {
-    width: "90%",
-    alignSelf: "center",
-  },
+
   camera: {
     flex: 1,
   },
