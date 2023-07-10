@@ -22,6 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Sharing from "expo-sharing";
 import ColorSelector from "../components/ColorSelector";
 import SizeSlider from "../components/SizeSlider";
+import AutoSaveToggle from "../components/AutoSaveToggle";
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
@@ -39,6 +40,7 @@ function CameraScreen() {
   const [sliderValue, setSliderValue] = useState(23);
   const [pickedDateTime, setPickedDateTime] = useState(null);
   const snapShotRef = useRef();
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
     const saveSettings = async () => {
@@ -120,11 +122,18 @@ function CameraScreen() {
   }, []);
 
   const takePicture = async () => {
-    if (cameraRef.current) {
+    const options = { quality: 1 };
+    const data = await cameraRef.current.takePictureAsync(options);
+    if (cameraRef.current && toggle === false) {
       try {
-        const options = { quality: 1 };
-        const data = await cameraRef.current.takePictureAsync(options);
         setImage(data.uri);
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (cameraRef.current && toggle === true) {
+      try {
+        setImage(data.uri);
+        setTimeout(saveImage, 100);
       } catch (e) {
         console.log(e);
       }
@@ -143,7 +152,9 @@ function CameraScreen() {
       }
       setImage(null);
       setPickedDateTime(null);
-      Alert.alert("사진이 저장되었습니다.");
+      if (toggle === false) {
+        Alert.alert("사진이 저장되었습니다.");
+      }
     } catch (e) {
       console.log(e);
     }
@@ -245,6 +256,7 @@ function CameraScreen() {
       <View style={styles.topContainer}>
         <ColorSelector setFontColor={setFontColor} />
         <SizeSlider sliderValue={sliderValue} setSliderValue={setSliderValue} />
+        <AutoSaveToggle toggle={toggle} setToggle={setToggle} image={image} />
       </View>
       {!image ? (
         <Camera style={styles.camera} type={cameraType} ref={cameraRef}>
@@ -347,14 +359,34 @@ function CameraScreen() {
         </View>
       ) : (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={reTake} style={styles.imagePickerButton}>
-            <Ionicons name="return-down-back-outline" size={35} color="white" />
+          <TouchableOpacity
+            disabled={toggle}
+            onPress={!toggle && reTake}
+            style={styles.imagePickerButton}
+          >
+            <Ionicons
+              name="return-down-back-outline"
+              size={35}
+              color={toggle ? "black" : "white"}
+            />
           </TouchableOpacity>
-          <TouchableOpacity onPress={shareImage} style={styles.shareButton}>
-            <Entypo name="share" size={35} color="white" />
+          <TouchableOpacity
+            disabled={toggle}
+            onPress={!toggle && shareImage}
+            style={styles.shareButton}
+          >
+            <Entypo name="share" size={35} color={toggle ? "black" : "white"} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={saveImage} style={styles.saveButton}>
-            <MaterialIcons name="save-alt" size={35} color="white" />
+          <TouchableOpacity
+            disabled={toggle}
+            onPress={!toggle && saveImage}
+            style={styles.saveButton}
+          >
+            <MaterialIcons
+              name="save-alt"
+              size={35}
+              color={toggle ? "black" : "white"}
+            />
           </TouchableOpacity>
         </View>
       )}
@@ -383,7 +415,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flexDirection: "row",
-    marginHorizontal: 20,
+    marginHorizontal: 12,
     marginVertical: 20,
     alignItems: "center",
     justifyContent: "space-between",

@@ -36,15 +36,17 @@ export default SizeSlider;
 
 const styles = StyleSheet.create({
   container: {
+    paddingHorizontal: 8,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    width: "50%",
   },
   sliderContainer: {
     flex: 1,
+    width: "100%",
   },
   slider: {
-    width: 200,
-    height: 40,
+    width: "100%",
   },
 });

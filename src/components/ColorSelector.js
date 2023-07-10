@@ -9,7 +9,7 @@ const ColorSelector = ({ setFontColor }) => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        width: "30%",
+        width: "25%",
       }}
     >
       <View>
