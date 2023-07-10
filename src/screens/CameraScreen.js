@@ -34,13 +34,44 @@ function CameraScreen() {
   const [image, setImage] = useState(null);
   const [cameraType, setCameraType] = useState(CameraType.back);
   const cameraRef = useRef(null);
-  const [textLocation, setTextLocation] = useState();
-  const [fontColor, setFontColor] = useState();
-  const [version, setVersion] = useState();
+  const [textLocation, setTextLocation] = useState("5");
+  const [fontColor, setFontColor] = useState("white");
+  const [version, setVersion] = useState("ver1");
   const [sliderValue, setSliderValue] = useState(23);
   const [pickedDateTime, setPickedDateTime] = useState(null);
   const snapShotRef = useRef();
   const [toggle, setToggle] = useState(false);
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const savedTextLocation = await AsyncStorage.getItem("textLocation");
+        setTextLocation(savedTextLocation);
+
+        const savedFontColor = await AsyncStorage.getItem("fontColor");
+        setFontColor(savedFontColor);
+
+        const savedVersion = await AsyncStorage.getItem("version");
+        setVersion(savedVersion);
+
+        const savedSliderValue = await AsyncStorage.getItem("sliderValue");
+        setSliderValue(parseInt(savedSliderValue));
+
+        const savedToggle = JSON.parse(await AsyncStorage.getItem("toggle"));
+        setToggle(savedToggle);
+
+        console.log("loaded", savedTextLocation);
+        console.log("loaded", savedFontColor);
+        console.log("loaded", savedVersion);
+        console.log("loaded", savedSliderValue);
+        console.log("loaded", savedToggle);
+      } catch (error) {
+        console.log("Error loading settings:", error);
+      }
+    };
+
+    loadSettings();
+  }, []);
 
   useEffect(() => {
     const saveSettings = async () => {
@@ -49,61 +80,20 @@ function CameraScreen() {
         await AsyncStorage.setItem("fontColor", fontColor);
         await AsyncStorage.setItem("version", version);
         await AsyncStorage.setItem("sliderValue", sliderValue.toString());
+        await AsyncStorage.setItem("toggle", JSON.stringify(toggle));
 
         console.log("saved", textLocation);
         console.log("saved", fontColor);
         console.log("saved", version);
         console.log("saved", sliderValue);
+        console.log("saved", toggle);
       } catch (error) {
         console.log("Error saving settings:", error);
       }
     };
 
     saveSettings();
-  }, [textLocation, fontColor, version, sliderValue]);
-
-  useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        const savedTextLocation = await AsyncStorage.getItem("textLocation");
-        if (savedTextLocation === null || savedTextLocation === undefined) {
-          setTextLocation("5");
-        } else {
-          setTextLocation(savedTextLocation);
-        }
-
-        const savedFontColor = await AsyncStorage.getItem("fontColor");
-        if (savedFontColor === null || savedFontColor === undefined) {
-          setFontColor("white");
-        } else {
-          setFontColor(savedFontColor);
-        }
-
-        const savedVersion = await AsyncStorage.getItem("version");
-        if (savedVersion === null || savedVersion === undefined) {
-          setVersion("ver1");
-        } else {
-          setVersion(savedVersion);
-        }
-
-        const savedSliderValue = await AsyncStorage.getItem("sliderValue");
-        if (savedSliderValue === null || savedSliderValue === undefined) {
-          setSliderValue(23);
-        } else {
-          setSliderValue(parseInt(savedSliderValue));
-        }
-
-        console.log("loaded", savedTextLocation);
-        console.log("loaded", savedFontColor);
-        console.log("loaded", savedVersion);
-        console.log("loaded", savedSliderValue);
-      } catch (error) {
-        console.log("Error loading settings:", error);
-      }
-    };
-
-    loadSettings();
-  }, []);
+  }, [textLocation, fontColor, version, sliderValue, toggle]);
 
   useEffect(() => {
     (async () => {

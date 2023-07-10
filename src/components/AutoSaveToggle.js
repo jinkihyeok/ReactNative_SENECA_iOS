@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import Toggle from "react-native-toggle-input";
 
 const AutoSaveToggle = ({ toggle, setToggle, image }) => {
@@ -62,7 +62,11 @@ const AutoSaveToggle = ({ toggle, setToggle, image }) => {
         alignItems: "center",
         width: "20%",
       }}
-    ></View>
+    >
+      <View>
+        <ActivityIndicator size="large" color="white" />
+      </View>
+    </View>
   );
 };
 
