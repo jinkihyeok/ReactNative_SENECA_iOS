@@ -2,6 +2,7 @@ import { StyleSheet, SafeAreaView, StatusBar } from "react-native";
 import CameraScreen from "./src/screens/CameraScreen";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect, useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,10 +33,12 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={styles.container} onLayout={onLayoutRootView}>
-      <StatusBar animated={true} barStyle="light-content" />
-      <CameraScreen />
-    </SafeAreaView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container} onLayout={onLayoutRootView}>
+        <StatusBar animated={true} barStyle="light-content" />
+        <CameraScreen />
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 

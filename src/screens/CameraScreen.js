@@ -23,6 +23,7 @@ import * as Sharing from "expo-sharing";
 import ColorSelector from "../components/ColorSelector";
 import SizeSlider from "../components/SizeSlider";
 import AutoSaveToggle from "../components/AutoSaveToggle";
+import { PinchGestureHandler } from "react-native-gesture-handler";
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
@@ -41,6 +42,25 @@ function CameraScreen() {
   const [pickedDateTime, setPickedDateTime] = useState(null);
   const snapShotRef = useRef();
   const [toggle, setToggle] = useState(false);
+
+  const [cameraZoom, setCameraZoom] = useState(0);
+
+  const onPinchGestureEvent = (event) => {
+    const { velocity } = event.nativeEvent;
+
+    let newCameraZoom;
+    if (velocity > 0) {
+      newCameraZoom = cameraZoom + 0.0003; // 양수일 때 일정한 비율로 증가
+    } else if (velocity < 0) {
+      newCameraZoom = cameraZoom - 0.0003; // 음수일 때 일정한 비율로 감소
+    }
+
+    // 유효성 검사
+    if (typeof newCameraZoom === "number" && !isNaN(newCameraZoom)) {
+      newCameraZoom = Math.max(0, Math.min(1, newCameraZoom)); // 최소 0, 최대 1로 제한
+      setCameraZoom(newCameraZoom);
+    }
+  };
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -249,35 +269,43 @@ function CameraScreen() {
         <AutoSaveToggle toggle={toggle} setToggle={setToggle} image={image} />
       </View>
       {!image ? (
-        <Camera style={styles.camera} type={cameraType} ref={cameraRef}>
-          <ImageBackground
-            style={[styles.bgImage, textLocationStyle()]}
-            resizeMode="cover"
+        <PinchGestureHandler onGestureEvent={onPinchGestureEvent}>
+          <Camera
+            style={styles.camera}
+            ref={cameraRef}
+            type={cameraType}
+            autoFocus={Camera.Constants.AutoFocus.on}
+            zoom={cameraZoom}
           >
-            <View style={styles.PatternViewContainer}>
-              <PatternView />
-            </View>
-            <View style={styles.dateContainer}>
-              <DateVersion
-                version={version}
-                sliderValue={sliderValue}
-                pickedDateTime={pickedDateTime}
-                fontColor={fontColor}
-              />
-            </View>
-            <View style={styles.locationButtonContainer}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((location) => (
-                <Pressable
-                  key={location}
-                  style={styles.locationButton}
-                  onPress={() => setTextLocation(location.toString())}
-                >
-                  <Text style={styles.locationButtonText}>Touch</Text>
-                </Pressable>
-              ))}
-            </View>
-          </ImageBackground>
-        </Camera>
+            <ImageBackground
+              style={[styles.bgImage, textLocationStyle()]}
+              resizeMode="cover"
+            >
+              <View style={styles.PatternViewContainer}>
+                <PatternView />
+              </View>
+              <View style={styles.dateContainer}>
+                <DateVersion
+                  version={version}
+                  sliderValue={sliderValue}
+                  pickedDateTime={pickedDateTime}
+                  fontColor={fontColor}
+                />
+              </View>
+              <View style={styles.locationButtonContainer}>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((location) => (
+                  <Pressable
+                    key={location}
+                    style={styles.locationButton}
+                    onPress={() => setTextLocation(location.toString())}
+                  >
+                    <Text style={styles.locationButtonText}>Touch</Text>
+                  </Pressable>
+                ))}
+              </View>
+            </ImageBackground>
+          </Camera>
+        </PinchGestureHandler>
       ) : (
         <View style={styles.imageContainer} ref={snapShotRef}>
           <ImageBackground

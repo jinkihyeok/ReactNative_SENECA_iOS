@@ -54,7 +54,7 @@ const AutoSaveToggle = ({ toggle, setToggle, image }) => {
         </Text>
       </View>
     </View>
-  ) : (
+  ) : toggle ? (
     <View
       style={{
         flexDirection: "column",
@@ -67,6 +67,15 @@ const AutoSaveToggle = ({ toggle, setToggle, image }) => {
         <ActivityIndicator size="large" color="white" />
       </View>
     </View>
+  ) : (
+    <View
+      style={{
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "20%",
+      }}
+    ></View>
   );
 };
 
