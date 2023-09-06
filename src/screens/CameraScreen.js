@@ -24,6 +24,7 @@ import ColorSelector from "../components/ColorSelector";
 import SizeSlider from "../components/SizeSlider";
 import AutoSaveToggle from "../components/AutoSaveToggle";
 import { PinchGestureHandler } from "react-native-gesture-handler";
+import { set } from "react-native-reanimated";
 
 Text.defaultProps = Text.defaultProps || {};
 Text.defaultProps.allowFontScaling = false;
@@ -177,6 +178,11 @@ function CameraScreen() {
 
   const pickImage = async () => {
     try {
+      if (toggle === true) {
+        Alert.alert("자동 저장 모드가 해제됩니다.");
+        setToggle(false);
+      }
+
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: false,
@@ -275,6 +281,7 @@ function CameraScreen() {
             ref={cameraRef}
             type={cameraType}
             autoFocus={Camera.Constants.AutoFocus.on}
+            playSoundOnCapture={false}
             zoom={cameraZoom}
           >
             <ImageBackground
