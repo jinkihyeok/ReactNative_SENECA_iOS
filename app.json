@@ -2,7 +2,7 @@
   "expo": {
     "name": "SENECA",
     "slug": "JINS2ndAPP",
-    "version": "1.1.7",
+    "version": "1.2.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -16,7 +16,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "1.1.7",
+      "buildNumber": "1.2.2",
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "This app needs access to your camera to take pictures.",

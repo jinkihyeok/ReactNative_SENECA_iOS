@@ -1,9 +1,18 @@
 import { View, Text } from "react-native";
 
-Text.defaultProps = Text.defaultProps || {};
-Text.defaultProps.allowFontScaling = false;
+interface DateVersionProps {
+  version: string;
+  sliderValue: number;
+  pickedDateTime: string | null;
+  fontColor: string;
+}
 
-function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
+const DateVersion: React.FC<DateVersionProps> = ({
+  version,
+  sliderValue,
+  pickedDateTime,
+  fontColor,
+}) => {
   const newdate = new Date();
 
   function getYear() {
@@ -135,7 +144,7 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
       const hours = newdate.getHours();
       const minutes = newdate.getMinutes();
       const getHours = () => {
-        if (0 < hours < 10) {
+        if (0 < hours && hours < 10) {
           return `${hours}`;
         } else if (hours <= 12) {
           return `${hours}`;
@@ -159,11 +168,11 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
       };
       return `${getHours()}:${getMinutes()} ${getAmPm()}`;
     } else {
-      const pickedHours = pickedDateTime.slice(11, 13);
+      const pickedHours = parseInt(pickedDateTime.slice(11, 13), 10);
       const pickedMinutes = pickedDateTime.slice(14, 16);
       const getHours = () => {
         if (pickedHours < 10) {
-          return `${pickedHours.slice(1)}`;
+          return `${pickedHours % 10}`;
         } else if (pickedHours <= 12) {
           return `${pickedHours}`;
         } else if (pickedHours > 12) {
@@ -189,7 +198,7 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
       const hours = newdate.getHours();
       const minutes = newdate.getMinutes();
       const getHours = () => {
-        if (0 < hours < 10) {
+        if (0 < hours && hours < 10) {
           return `${hours}`;
         } else if (hours <= 12) {
           return `${hours}`;
@@ -213,11 +222,11 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
       };
       return `${getAmPm()} ${getHours()}:${getMinutes()}`;
     } else {
-      const pickedHours = pickedDateTime.slice(11, 13);
+      const pickedHours = parseInt(pickedDateTime.slice(11, 13), 10);
       const pickedMinutes = pickedDateTime.slice(14, 16);
       const getHours = () => {
         if (pickedHours < 10) {
-          return `${pickedHours.slice(1)}`;
+          return `${pickedHours % 10}`;
         } else if (pickedHours <= 12) {
           return `${pickedHours}`;
         } else if (pickedHours > 12) {
@@ -484,6 +493,6 @@ function DateVersion({ version, sliderValue, pickedDateTime, fontColor }) {
       </View>
     );
   }
-}
+};
 
 export default DateVersion;

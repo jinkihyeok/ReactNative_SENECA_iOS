@@ -1,10 +1,15 @@
-import { StyleSheet, SafeAreaView, StatusBar } from "react-native";
-import CameraScreen from "./src/screens/CameraScreen";
+import { StyleSheet, SafeAreaView, StatusBar, Text } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { CameraScreen } from "./src/screen/camera-screen";
 
 SplashScreen.preventAutoHideAsync();
+
+// @ts-ignore
+Text.defaultProps = Text.defaultProps || {};
+// @ts-ignore
+Text.defaultProps.allowFontScaling = false;
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);

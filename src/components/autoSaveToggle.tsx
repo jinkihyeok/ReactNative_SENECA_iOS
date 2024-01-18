@@ -2,7 +2,17 @@ import React from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 import Toggle from "react-native-toggle-input";
 
-const AutoSaveToggle = ({ toggle, setToggle, image }) => {
+interface AutoSaveToggleProps {
+  toggle: boolean;
+  setToggle: React.Dispatch<React.SetStateAction<boolean>>;
+  image: string | null;
+}
+
+const AutoSaveToggle: React.FC<AutoSaveToggleProps> = ({
+  toggle,
+  setToggle,
+  image,
+}) => {
   const onAndOff = () => {
     if (toggle === true) {
       return "On";
@@ -39,6 +49,7 @@ const AutoSaveToggle = ({ toggle, setToggle, image }) => {
           width: "100%",
         }}
       >
+        {/* @ts-ignore */}
         <Toggle toggle={toggle} setToggle={setToggle} size={18} color="white" />
       </View>
       <View>

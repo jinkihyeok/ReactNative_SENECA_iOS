@@ -2,7 +2,11 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
-const ColorSelector = ({ setFontColor }) => {
+interface ColorSelectorProps {
+  setFontColor: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const ColorSelector: React.FC<ColorSelectorProps> = ({ setFontColor }) => {
   return (
     <View
       style={{

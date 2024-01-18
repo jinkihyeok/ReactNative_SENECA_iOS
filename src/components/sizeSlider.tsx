@@ -2,7 +2,15 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Slider from "@react-native-community/slider";
 
-const SizeSlider = ({ sliderValue, setSliderValue }) => {
+interface SizeSliderProps {
+  sliderValue: number;
+  setSliderValue: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const SizeSlider: React.FC<SizeSliderProps> = ({
+  sliderValue,
+  setSliderValue,
+}) => {
   return (
     <View style={styles.container}>
       <View style={{ alignItems: "center" }}>

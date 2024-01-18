@@ -13,3 +13,8 @@ certs
 
 # macOS
 .DS_Store
+.credentials.json
+.babel.config.js
+.eas.json
+.package.json
+.package-lock.json
